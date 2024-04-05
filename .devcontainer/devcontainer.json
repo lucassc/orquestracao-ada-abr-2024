@@ -1,0 +1,17 @@
+{
+    "postAttachCommand": "/bin/bash .devcontainer/setup.sh",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "eamodio.gitlens",
+                "redhat.vscode-yaml",
+                "foxundermoon.shell-format",
+                "ms-azuretools.vscode-docker",
+                "GitHub.copilot",
+                "ms-kubernetes-tools.vscode-kubernetes-tools",
+                "streetsidesoftware.code-spell-checker",
+                "streetsidesoftware.code-spell-checker-portuguese-brazilian"
+            ]
+        }
+    }
+}

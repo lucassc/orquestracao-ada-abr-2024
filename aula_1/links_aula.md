@@ -9,3 +9,4 @@
 - [OpenShift and Kubernetes: What's the difference?](https://www.redhat.com/en/blog/openshift-and-kubernetes-whats-difference)
 - [k3d Overview](https://k3d.io)
 - [minikube start](https://minikube.sigs.k8s.io/docs/start/)
+- [Figure - available from: Service Oriented Computing and Applications](https://www.researchgate.net/figure/Kubernetes-resources-relationship_fig5_371040134)

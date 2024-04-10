@@ -10,3 +10,4 @@
 - [k3d Overview](https://k3d.io)
 - [minikube start](https://minikube.sigs.k8s.io/docs/start/)
 - [Figure - available from: Service Oriented Computing and Applications](https://www.researchgate.net/figure/Kubernetes-resources-relationship_fig5_371040134)
+- [Lens Desktop](https://k8slens.dev/)

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: exercicio-x-dia-2
+  name: exercicio-x-dia-2
+spec:
+  serviceName: default
+  replicas: 2
+  selector:
+    matchLabels:
+      app: exercicio-x-dia-2
+  template:
+    metadata:
+      labels:
+        app: exercicio-x-dia-2
+    spec:
+      containers:
+        - command:
+            - sleep
+            - "3600"
+          image: busybox
+          name: busybox
+          ports:
+            - containerPort: 80
+          resources: {}
+status: {}

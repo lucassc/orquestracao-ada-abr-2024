@@ -1,0 +1,201 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: finance
+spec: {}
+status: {}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: meu-app-1-config
+  namespace: finance
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <title>Meu-app-1</title>
+    </head>
+    <body>
+        <p>Meu-app-1<p>
+    </body>
+    </html>
+  teste.txt: |
+    teste
+  VERSAO: "1.0"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: meu-app-2-config
+  namespace: finance
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <title>Meu-app-2</title>
+    </head>
+    <body>
+        <p>Meu-app-2<p>
+    </body>
+    </html>
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: meu-app-1-secret
+  namespace: finance
+data:
+  senha: c2VuaGFGb3J0ZQ==
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: meu-app-1
+  name: meu-app-1
+  namespace: finance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: meu-app-1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: meu-app-1
+    spec:
+      containers:
+        - image: nginx:latest
+          name: meu-app-1
+          envFrom:
+            - configMapRef:
+                name: meu-app-1-config
+          env:
+            - name: VERSA000000_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: meu-app-1-config
+                  key: VERSAO
+            - name: SENHA
+              valueFrom:
+                secretKeyRef:
+                  name: meu-app-1-secret
+                  key: senha
+          ports:
+            - containerPort: 80
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: conteudo-do-site-volume
+            - mountPath: /etc/site/
+              name: secret-volume
+      volumes:
+        - configMap:
+            name: meu-app-1-config
+          name: conteudo-do-site-volume
+        - secret:
+            secretName: meu-app-1-secret
+          name: secret-volume
+status: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: meu-app-2
+  name: meu-app-2
+  namespace: finance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: meu-app-2
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: meu-app-2
+    spec:
+      containers:
+        - image: nginx:latest
+          name: meu-app-2
+          ports:
+            - containerPort: 80
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: conteudo-do-site-volume
+      volumes:
+        - configMap:
+            name: meu-app-2-config
+          name: conteudo-do-site-volume
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: meu-app-1
+  name: meu-app-1
+  namespace: finance
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: meu-app-1
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: meu-app-2
+  name: meu-app-2
+  namespace: finance
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: meu-app-2
+status:
+  loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: meu-app
+  namespace: finance
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: meu-app.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: meu-app-1
+                port:
+                  number: 80
+            path: /meu-app-1(/|$)(.*)
+            pathType: Prefix
+          - backend:
+              service:
+                name: meu-app-2
+                port:
+                  number: 80
+            path: /meu-app-2(/|$)(.*)
+            pathType: Prefix
+status:
+  loadBalancer: {}

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: exercicio-1-dia-2
+  name: exercicio-1-dia-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exercicio-1-dia-2
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: exercicio-1-dia-2
+    spec:
+      containers:
+        - image: nginx:1.18
+          name: nginx
+          ports:
+            - containerPort: 80
+          resources: {}
+status: {}

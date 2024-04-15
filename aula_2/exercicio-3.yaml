@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: exercicio-3-dia-2
+  name: exercicio-3-dia-2
+spec:
+  selector:
+    matchLabels:
+      app: exercicio-3-dia-2
+  template:
+    metadata:
+      labels:
+        app: exercicio-3-dia-2
+    spec:
+      containers:
+        - command:
+            - sleep
+            - "3600"
+          image: busybox
+          name: busybox
+          ports:
+            - containerPort: 80
+          resources: {}
+status: {}

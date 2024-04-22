@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: teste-cpu
+spec:
+  template:
+    spec:
+      containers:
+        - image: schwendler/orquestracao_ada_aula_6_cpu:v1
+          imagePullPolicy: Always
+          name: teste-cpu
+          # resources:
+          #   requests:
+          #     cpu: "50m"
+          #   limits:
+          #     cpu: "100m"
+      restartPolicy: OnFailure
+    # backoffLimit: 4
+status: {}

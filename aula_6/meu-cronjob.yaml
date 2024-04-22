@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: meu-cronjob
+  labels:
+    app: meu-cronjob
+spec:
+  successfulJobsHistoryLimit: 3
+
+  jobTemplate:
+    metadata:
+      name: meu-cronjob
+      labels:
+        app: meu-cronjob
+    spec:
+      ttlSecondsAfterFinished: 600
+      template:
+        metadata:
+          labels:
+            app: meu-cronjob
+        spec:
+          containers:
+            - image: schwendler/orquestracao_ada_aula_6_cpu:v0
+              name: meu-cronjob
+              resources:
+          restartPolicy: OnFailure
+  schedule: "*/2 * * * *"
+status: {}

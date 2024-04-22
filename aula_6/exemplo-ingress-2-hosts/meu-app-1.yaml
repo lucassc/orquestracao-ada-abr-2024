@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: meu-app-1-config
+  namespace: finance
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <title>Meu-app-1</title>
+    </head>
+    <body>
+        <p>Meu-app-1<p>
+    </body>
+    </html>
+  teste.txt: |
+    teste
+  VERSAO: "1.0"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: meu-app-1
+  name: meu-app-1
+  namespace: finance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: meu-app-1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: meu-app-1
+    spec:
+      containers:
+        - image: nginx:latest
+          name: meu-app-1
+          envFrom:
+            - configMapRef:
+                name: meu-app-1-config
+          ports:
+            - containerPort: 80
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: conteudo-do-site-volume
+      volumes:
+        - configMap:
+            name: meu-app-1-config
+          name: conteudo-do-site-volume
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: meu-app-1
+  name: meu-app-1-svc
+  namespace: finance
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: meu-app-1
+status:
+  loadBalancer: {}

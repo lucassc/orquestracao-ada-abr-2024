@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: meu-app-2-config
+  namespace: credit
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <title>Meu-app-2</title>
+    </head>
+    <body>
+        <p>Meu-app-2<p>
+    </body>
+    </html>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: meu-app-2
+  name: meu-app-2
+  namespace: credit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: meu-app-2
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: meu-app-2
+    spec:
+      containers:
+        - image: nginx:latest
+          name: meu-app-2
+          ports:
+            - containerPort: 80
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: conteudo-do-site-volume
+      volumes:
+        - configMap:
+            name: meu-app-2-config
+          name: conteudo-do-site-volume
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: meu-app-2
+  name: meu-app-2-svc
+  namespace: credit
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: meu-app-2
+status:
+  loadBalancer: {}

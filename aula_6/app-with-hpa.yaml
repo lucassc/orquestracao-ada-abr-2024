@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app-aula-6
+  name: app-aula-6
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-aula-6
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: app-aula-6
+        version: v3
+        deploy: "10"
+    spec:
+      containers:
+        - image: schwendler/orquestracao_ada:v3
+          name: container-1
+          ports:
+            - containerPort: 5000
+          env:
+            - name: AMBIENTE
+              value: DEV
+            - name: BANCO_DADOS_2
+              value: DEV
+          livenessProbe:
+            httpGet:
+              path: /HEALTH
+              port: 5000
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /READY
+              port: 5000
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 1
+            successThreshold: 0
+          startupProbe:
+            httpGet:
+              path: /STARTED
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            failureThreshold: 3
+
+      resources:
+        requests:
+          cpu: "50m"
+          memory: "100Mi"
+        limits:
+          cpu: "100m"
+          memory: "200Mi"
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,34 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-prefix
+  namespace: credit
+spec:
+  stripPrefix:
+    prefixes:
+      - "/meu-app-1"
+      - "/meu-app-2"
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: my-ingress-route
+  namespace: credit
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`meu-app-ingress-1-host.com`) && PathPrefix(`/meu-app-1`)
+      kind: Rule
+      services:
+        - name: meu-app-1-svc
+          port: 80
+      middlewares:
+        - name: strip-prefix
+    - match: Host(`meu-app-ingress-1-host.com`) && PathPrefix(`/meu-app-2`)
+      kind: Rule
+      services:
+        - name: meu-app-2-svc
+          port: 80
+      middlewares:
+        - name: strip-prefix

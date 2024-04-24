@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app-aula-7
+  name: app-aula-7
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: app-aula-7
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: app-aula-7
+    spec:
+      tolerations:
+        - key: "system"
+          operator: "Equal"
+          value: "critic"
+          effect: NoSchedule
+      containers:
+        - image: schwendler/orquestracao_ada_aula_7_api_cpu:v1
+          name: container-1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: AMBIENTE
+              value: TST
+          livenessProbe:
+            httpGet:
+              path: /HEALTH
+              port: 5000
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 3
+
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "50Mi"
+            limits:
+              cpu: "100m"
+              memory: "100Mi"
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+status: {}

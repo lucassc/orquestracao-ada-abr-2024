@@ -1,0 +1,5 @@
+replicaCount: 2
+
+persistence:
+  # --set=persistence.enabled=true
+  enabled: true

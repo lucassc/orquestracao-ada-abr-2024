@@ -9,4 +9,5 @@
 | [Aula 5](./aula_5/README.md)   |
 | [Aula 6](./aula_6/README.md)   |
 | [Aula 7](./aula_7/README.md)   |
+| [Aula 8](./aula_8/README.md)   |
 | [Projeto](./projeto/README.md) |

@@ -189,13 +189,13 @@ spec:
                 port:
                   number: 80
             path: /meu-app-1(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
           - backend:
               service:
                 name: meu-app-2
                 port:
                   number: 80
             path: /meu-app-2(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
 status:
   loadBalancer: {}

@@ -18,6 +18,6 @@ spec:
                 port:
                   number: 80
             path: /meu-app-1(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
 status:
   loadBalancer: {}
